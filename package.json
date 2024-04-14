@@ -2,12 +2,12 @@
   "name": "zenkit-clone",
   "version": "1.0.0",
   "description": "This is a clone for the Zenkit task management APP",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon",
-    "test": "jest"
+    "test": "jest --watchAll"
   },
   "keywords": [],
   "author": "",

@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import configurations from "./configs/index.js";
 import taskRouter from "./routes/task.routes.js";
 import ErrorHandler from "./middlewares/ErrorHandler.js";
+import swaggerUi from 'swagger-ui-express';
 
 const corsOptions = {
     allowedHeaders: ["Authorization","Content-Type"],
@@ -16,6 +17,8 @@ const corsOptions = {
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.use('/api-doc', taskRouter);
 app.use('/task', taskRouter);
 
 mongoose.connect("mongodb://localhost:27017/zenkit")
