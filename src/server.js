@@ -5,12 +5,7 @@ import configurations from "./configs/index.js";
 import allRoutes from "./routes/index.js";
 import ErrorHandler from "./middlewares/ErrorHandler.js";
 import swaggerUi from 'swagger-ui-express';
-
-// Importing openapi specifications which are in json format.
-var openApiData = null;
-async () => {
-    openApiData = await import('./docs/openapi.yaml');
-}
+import documentation from './docs/documentation.js';
 
 // Cors policy configuration.
 const corsOptions = {
@@ -24,7 +19,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(openApiData));
+app.use('/api-doc', swaggerUi.serve);
+app.use('/api-doc', swaggerUi.setup(documentation));
 app.use('/api/v1', allRoutes);
 
 // Database connectivity
