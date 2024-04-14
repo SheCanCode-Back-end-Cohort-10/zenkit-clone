@@ -22,7 +22,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api/v1"
+      "url": "https://zenkit-clone.onrender.com/api/v1"
     }
   ],
   "tags": [

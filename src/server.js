@@ -9,7 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 // Importing openapi specifications which are in json format.
 var openApiData = null;
 async () => {
-    openApiData = await import('./docs/openapi.json');
+    openApiData = await import('./docs/openapi.yaml');
 }
 
 // Cors policy configuration.
