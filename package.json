@@ -1,6 +1,6 @@
 {
   "name": "zenkit-clone",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This is a clone for the Zenkit task management APP",
   "main": "src/server.js",
   "type": "module",

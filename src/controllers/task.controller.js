@@ -3,7 +3,15 @@ import TaskModel from '../models/task.model.js';
 import { validationResult } from 'express-validator';
 
 export const test = (req, res, next) => {
-    res.send('Hello World!');
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log(errors.array());
+        return next(new BadRequestError(errors.array()[0].msg));
+    }
+
+    res.status(200).json({
+        message: 'Hello World!'
+    });
 }
 
 export const addTask = async (req, res, next) => {
