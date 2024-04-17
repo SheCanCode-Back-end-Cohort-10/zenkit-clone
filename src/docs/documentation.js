@@ -1,0 +1,336 @@
+const swaggerDocumentation = {
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Zenkit Clone Application",
+        "description": "This is the API Specification for the zenkit clone app backend server.",
+        "contact": {
+            "email": "hirwajeric@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/license/mit"
+        },
+        "version": "1.0.0"
+    },
+    "externalDocs": {
+        "description": "Get source code",
+        "url": "https://github.com/SheCanCode-Back-end-Cohort-10/zenkit-clone"
+    },
+    "basePath": "/api/v1",
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Local server"
+        },
+        {
+            "url": "https://zenkit-clone.onrender.com",
+            "description": "Production server"
+        }
+    ],
+    "schemes": ["http", "https"],
+    "tags": [
+        {
+            "name": "tasks",
+            "description": "Operations pertaining to tasks"
+        }
+    ],
+    "paths": {
+        "/api/v1/tasks/test": {
+            "get": {
+                "tags":["tasks"],
+                "summary": "Test API endpoint",
+                "description": "Returns a 'Hello World!' message",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Hello World!"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks/add": {
+            "post": {
+                "tags": ["tasks"],
+                "summary": "Add a new task",
+                "description": "Creates a new task with the provided details",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Task"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Task created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Task"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks/list": {
+            "get": {
+                "tags": ["tasks"],
+                "summary": "Get all tasks",
+                "description": "Retrieves a list of all tasks",
+                "responses": {
+                    "200": {
+                        "description": "Tasks retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Task"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks/update": {
+            "put": {
+                "tags": ["tasks"],
+                "summary": "Update a task",
+                "description": "Updates an existing task with the provided details",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Task"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Task"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks/findById": {
+            "get": {
+                "tags": ["tasks"],
+                "summary": "Get a task by ID",
+                "description": "Retrieves a specific task based on its ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Task"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks/delete": {
+            "delete": {
+                "tags": ["tasks"],
+                "summary": "Delete a task",
+                "description": "Deletes a task based on its ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Task deleted"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Task": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Unique identifier of the task"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the task",
+                        "required": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the task"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Status of the task",
+                        "enum": [
+                            "Todo",
+                            "In Progress",
+                            "Completed",
+                            "Late",
+                            "Over-due"
+                        ]
+                    },
+                    "dueDate": {
+                        "type": "object",
+                        "properties": {
+                            "startDate": {
+                                "type": "string",
+                                "format": "date",
+                                "description": "Start date of the due date"
+                            },
+                            "endDate": {
+                                "type": "string",
+                                "format": "date",
+                                "description": "End date of the due date"
+                            },
+                            "startTime": {
+                                "type": "string",
+                                "description": "Start time of the due date"
+                            },
+                            "endTime": {
+                                "type": "string",
+                                "description": "End time of the due date"
+                            },
+                            "duration": {
+                                "type": "number",
+                                "description": "Duration of the task"
+                            },
+                            "durationType": {
+                                "type": "string",
+                                "enum": [
+                                    "Minutes",
+                                    "Hours",
+                                    "Days",
+                                    "Weeks",
+                                    "Months"
+                                ],
+                                "description": "Type of duration (Minutes, Hours, Days, etc.)"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+export default swaggerDocumentation;
