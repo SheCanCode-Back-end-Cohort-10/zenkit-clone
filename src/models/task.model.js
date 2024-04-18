@@ -18,6 +18,15 @@ const TaskSchema = new Schema({
         },
         default: "Todo",
     },
+    parentTask: {
+        type: Schema.Types.ObjectId,
+        ref: "Task",
+        required: false,
+    },
+    tags: {
+        type: Array,
+        required: false,
+    },
     dueDate: {
         startDate: {
             type: Date,
