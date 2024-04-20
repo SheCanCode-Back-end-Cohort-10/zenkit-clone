@@ -1,8 +1,9 @@
 import { NotFoundError, BadRequestError } from '../errors/index.js';
 import TaskModel from '../models/task.model.js';
 import { validationResult } from 'express-validator';
+import asyncWrapper from '../middlewares/async.js';
 
-export const test = (req, res, next) => {
+export const test = asyncWrapper((req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         console.log(errors.array());
@@ -12,33 +13,25 @@ export const test = (req, res, next) => {
     res.status(200).json({
         message: 'Hello World!'
     });
-}
+});
 
-export const addTask = async (req, res, next) => {
+export const addTask = asyncWrapper(async (req, res, next) => {
     const errors = validationResult(req);
-    try {
-        if (!errors.isEmpty()) {
-            next(new BadRequestError(errors.array()[0].msg));
-        }
-
-        const newTask = await TaskModel.create(req.body);
-        return res.status(201).json(newTask);
-    } catch (error) {
-        next(error);
+    if (!errors.isEmpty()) {
+        next(new BadRequestError(errors.array()[0].msg));
     }
-};
+
+    const newTask = await TaskModel.create(req.body);
+    return res.status(201).json(newTask);
+});
 
 export const getTasks = async (req, res, next) => {
-    try {
-        const tasks = await TaskModel.find({});
-        if (tasks) {
-            return res.status(200).json({ 
-                size: tasks.length,
-                tasks
-            });
-        }
-    } catch (error) {
-        next(error);
+    const tasks = await TaskModel.find({}).populate('tags');
+    if (tasks) {
+        return res.status(200).json({
+            size: tasks.length,
+            tasks
+        });
     }
 }
 
@@ -46,85 +39,70 @@ export const updateTask = async (req, res, next) => {
     const taskId = req.query.id;
     const updates = req.body;
 
-    try {
-        const updatedTask = await TaskModel.findByIdAndUpdate(taskId, updates, { new: true });
-        if (!updatedTask) {
-            return next(new NotFoundError(`Task not found`));
-        } 
-        return res.status(200).json(updatedTask);
-    } catch (error) {
-        next(error);
+    if (updates.tags) {
+        const taskBeforeUpdate = await TaskModel.findById(taskId);
+        let tags = [];
+        taskBeforeUpdate.tags.forEach(tag => {
+            tags.push(tag.toString());
+        })
+        tags.push(updates.tags[0]);
+        updates.tags = tags;
     }
+
+    const updatedTask = await TaskModel.findByIdAndUpdate(taskId, updates, { new: true });
+    if (!updatedTask) {
+        return next(new NotFoundError(`Task not found`));
+    }
+    return res.status(200).json(updatedTask);
 }
 
-export const findById = async (req, res, next) => {
+export const findById = asyncWrapper(async (req, res, next) => {
     const taskId = req.query.id;
-    
-    try {
-        const foundTask = await TaskModel.findById(taskId);
-        if (!foundTask) {
-            return next(new NotFoundError(`Task not found`));
-        }
-        return res.status(200).json(foundTask);
-    } catch (error) {
-        next(error);
+    const foundTask = await TaskModel.findById(taskId).populate('tags')
+    if (!foundTask) {
+        return next(new NotFoundError(`Task not found`));
     }
-}
+    return res.status(200).json(foundTask);
+});
 
-export const findByStatus = async (req, res, next) => {
+export const findByStatus = asyncWrapper(async (req, res, next) => {
     const taskStatus = req.query.status;
-    
-    try {
-        const foundTasks = await TaskModel.find({ status: taskStatus });
-        return res.status(200).json({
-            size: foundTasks.length,
-            foundTasks
-        });
-    } catch (error) {
-        next(error);
-    }
-};
 
-export const findByParentId = async (req, res, next) => {
+    const foundTasks = await TaskModel.find({ status: taskStatus });
+    return res.status(200).json({
+        size: foundTasks.length,
+        foundTasks
+    });
+});
+
+export const findByParentId = asyncWrapper(async (req, res, next) => {
     const parentId = req.query.parent;
-    
-    try {
-        const foundTasks = await TaskModel.find({ parentTask: parentId });
-        return res.status(200).json({
-            size: foundTasks.length,
-            foundTasks
-        });
-    } catch (error) {
-        next(error);
-    }
-};
 
-export const findByTag = async (req, res, next) => {
+    const foundTasks = await TaskModel.find({ parentTask: parentId });
+    return res.status(200).json({
+        size: foundTasks.length,
+        foundTasks
+    });
+});
+
+export const findByTag = asyncWrapper(async (req, res, next) => {
     const tagId = req.query.tag;
-    
-    try {
-        const allTasks = await TaskModel.find({});
-        const foundTasks = [];
-        allTasks.forEach(task => {
-            if (task.tags.includes(tagId)) {
-                foundTasks.push(task);
-            }
-        });
 
-        return res.status(200).json({
-            size: foundTasks.length,
-            foundTasks
-        });
-    } catch (error) {
-        next(error);
-    }
-}
+    const allTasks = await TaskModel.find({});
+    const foundTasks = [];
+    allTasks.forEach(task => {
+        if (task.tags.includes(tagId)) {
+            foundTasks.push(task);
+        }
+    });
 
-export const deleteTask = async (req, res, next) => {
-    try {
-        const deletedTask = await TaskModel.findByIdAndDelete(req.query.id);
-        return res.status(200).json({ message: 'Task deleted'});
-    } catch (error) {
-        next(error);
-    }
-}
+    return res.status(200).json({
+        size: foundTasks.length,
+        foundTasks
+    });
+});
+
+export const deleteTask = asyncWrapper(async (req, res, next) => {
+    const deletedTask = await TaskModel.findByIdAndDelete(req.query.id);
+    return res.status(200).json({ message: 'Task deleted' });
+});

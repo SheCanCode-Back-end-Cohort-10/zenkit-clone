@@ -13,7 +13,7 @@ const TaskSchema = new Schema({
         type: String,
         required: true,
         enum: {
-            values: ["Todo","In Progress", "Completed", "Late", "Over-due"],
+            values: ["Todo", "In Progress", "Completed", "Late", "Over-due"],
             message: "{VALUE} is not a valid status",
         },
         default: "Todo",
@@ -23,10 +23,11 @@ const TaskSchema = new Schema({
         ref: "Task",
         required: false,
     },
-    tags: {
-        type: Array,
-        required: false,
-    },
+    tags: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Tag',
+        required: false
+    }],
     dueDate: {
         startDate: {
             type: Date,
@@ -52,7 +53,7 @@ const TaskSchema = new Schema({
             type: String,
             required: false,
             enum: {
-                values: ["Minutes","Hours","Days", "Weeks", "Months"],
+                values: ["Minutes", "Hours", "Days", "Weeks", "Months"],
                 message: "{VALUE} is not a valid duration type",
             },
         }

@@ -3,7 +3,7 @@ import { durationCalculator } from '../utils/helperFunctions.js';
 export const setTime = async (req, res, next) => {
     var startTime = "";
     var endTime = "";
-    if (!req.body.dueData) {
+    if (!req.body.dueDate) {
         next();
     } else {
         if (req.body.dueDate.startDate) {
