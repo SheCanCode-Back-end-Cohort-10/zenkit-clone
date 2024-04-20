@@ -16,7 +16,8 @@ export const addTag = asyncWrapper(async (req, res, next) => {
 export const getTags = asyncWrapper(async (req, res, next) => {
     const tags = await TagModel.find({});
     if (tags) {
-        return res.status(200).json({ 
+        return res.status(200).json({
+            nbHits: tags.length,
             tags
         });
     }

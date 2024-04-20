@@ -29,7 +29,7 @@ export const getTasks = async (req, res, next) => {
     const tasks = await TaskModel.find({}).populate('tags');
     if (tasks) {
         return res.status(200).json({
-            size: tasks.length,
+            nbHits: tasks.length,
             tasks
         });
     }
@@ -70,7 +70,7 @@ export const findByStatus = asyncWrapper(async (req, res, next) => {
 
     const foundTasks = await TaskModel.find({ status: taskStatus });
     return res.status(200).json({
-        size: foundTasks.length,
+        nbHits: foundTasks.length,
         foundTasks
     });
 });
@@ -80,7 +80,7 @@ export const findByParentId = asyncWrapper(async (req, res, next) => {
 
     const foundTasks = await TaskModel.find({ parentTask: parentId });
     return res.status(200).json({
-        size: foundTasks.length,
+        nbHits: foundTasks.length,
         foundTasks
     });
 });
@@ -97,7 +97,7 @@ export const findByTag = asyncWrapper(async (req, res, next) => {
     });
 
     return res.status(200).json({
-        size: foundTasks.length,
+        nbHits: foundTasks.length,
         foundTasks
     });
 });
