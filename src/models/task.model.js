@@ -28,6 +28,11 @@ const TaskSchema = new Schema({
         ref: 'Tag',
         required: false
     }],
+    checkList: [{
+        type: Schema.Types.ObjectId,
+        ref: 'CheckListItem',
+        required: false
+    }],
     dueDate: {
         startDate: {
             type: Date,

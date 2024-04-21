@@ -48,6 +48,16 @@ export const updateTask = async (req, res, next) => {
         tags.push(updates.tags[0]);
         updates.tags = tags;
     }
+    
+    if (updates.tags) {
+        const taskBeforeUpdate = await TaskModel.findById(taskId);
+        let checkListItems = [];
+        taskBeforeUpdate.checkList.forEach(item => {
+            checkListItems.push(item.toString());
+        })
+        checkListItems.push(updates.checkList[0]);
+        updates.checkList = checkListItems;
+    }
 
     const updatedTask = await TaskModel.findByIdAndUpdate(taskId, updates, { new: true });
     if (!updatedTask) {
