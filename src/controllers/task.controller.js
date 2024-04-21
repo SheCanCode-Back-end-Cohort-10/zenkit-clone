@@ -35,7 +35,52 @@ export const getTasks = async (req, res, next) => {
     }
 }
 
-export const updateTask = async (req, res, next) => {
+export const addCheckListItem = asyncWrapper(async (req, res, next) => {
+    const taskId = req.query.id;
+    const item = req.body;
+
+    const taskBeforeUpdate = await TaskModel.findById(taskId);
+    const checkListItems = taskBeforeUpdate.checkList;
+    checkListItems.push(item);
+
+    const updatedTask = await TaskModel.findByIdAndUpdate(
+        taskId, 
+        { checkList: checkListItems }, 
+        { new: true }
+    ).populate("tags");
+
+    if (!updatedTask) {
+        return next(new NotFoundError(`Task not found`));
+    };
+
+    return res.status(200).json(updatedTask);    
+});
+
+export const updateCheckListItem = asyncWrapper(async (req, res, next) => {
+    const taskId = req.query.id;
+    const checkListItem = req.query.item;
+    const update = req.body;
+
+    const taskBeforeUpdate = await TaskModel.findById(taskId);
+    const checkListItems = taskBeforeUpdate.checkList;
+
+    checkListItems.forEach(item => {
+        if (item._id.toString() === checkListItem && !update.name) {
+            item.checked = !item.checked;
+        } else if (item._id.toString() === checkListItem && update.name) {
+            item.name = update.name;
+        }
+    });
+    
+    const updatedTask = await TaskModel.findByIdAndUpdate(taskId, { checkList: checkListItems }, { new: true });
+    if (!updatedTask) {
+        return next(new NotFoundError(`Task not found`));
+    };
+    
+    return res.status(200).json(updatedTask);    
+});
+
+export const updateTask = asyncWrapper(async (req, res, next) => {
     const taskId = req.query.id;
     const updates = req.body;
 
@@ -64,7 +109,7 @@ export const updateTask = async (req, res, next) => {
         return next(new NotFoundError(`Task not found`));
     }
     return res.status(200).json(updatedTask);
-}
+})
 
 export const findById = asyncWrapper(async (req, res, next) => {
     const taskId = req.query.id;

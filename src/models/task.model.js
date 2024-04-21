@@ -29,9 +29,15 @@ const TaskSchema = new Schema({
         required: false
     }],
     checkList: [{
-        type: Schema.Types.ObjectId,
-        ref: 'CheckListItem',
-        required: false
+        name: {
+            type: String,
+            required: true,
+        },
+        checked: {
+            type: Boolean,
+            required: true,
+            default: false
+        }
     }],
     dueDate: {
         startDate: {
