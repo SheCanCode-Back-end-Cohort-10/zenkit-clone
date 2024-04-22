@@ -1,0 +1,69 @@
+
+  VITE v5.2.10  ready in 496 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+^C
+hirwajeaneric@Innocents-MacBook-Pro-2 passport-auth-client % clear
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+hirwajeaneric@Innocents-MacBook-Pro-2 passport-auth-client % npm install -D tailwindcss postcss autoprefixer
+
+added 91 packages, and audited 318 packages in 5s
+
+126 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+hirwajeaneric@Innocents-MacBook-Pro-2 passport-auth-client % npx tailwindcss init -p
+
+Created Tailwind CSS config file: tailwind.config.js
+Created PostCSS config file: postcss.config.js
+hirwajeaneric@Innocents-MacBook-Pro-2 passport-auth-client % nano tailwind.config.js
+
+
+
+
+
+
+
+
+  UW PICO 5.09                File: tailwind.config.js                Modified  
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [  
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {    
+    extend: {},
+  },
+  plugins: [],
+}
+
+
+
+
+
+
+
+
+                            [ Unknown Command: ^S ]                             
+^G Get Help  ^O WriteOut  ^R Read File ^Y Prev Pg   ^K Cut Text  ^C Cur Pos   
+^X Exit      ^J Justify   ^W Where is  ^V Next Pg   ^U UnCut Text^T To Spell  
