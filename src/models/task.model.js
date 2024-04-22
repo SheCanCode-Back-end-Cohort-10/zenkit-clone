@@ -68,6 +68,13 @@ const TaskSchema = new Schema({
                 message: "{VALUE} is not a valid duration type",
             },
         }
+    },
+    workload: {
+        type: Number,
+        required: false,
+        default: 0,
+        min: 0,
+        max: 5
     }
 });
 

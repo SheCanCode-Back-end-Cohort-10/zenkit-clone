@@ -9,7 +9,7 @@ taskRouter.post('/add', setTime, addTaskValidation, addTask);
 taskRouter.post('/addCheckList', addCheckListItem);
 taskRouter.put('/updateCheckList', updateCheckListItem);
 taskRouter.get('/list', getTasks);
-taskRouter.put('/update', updateTask);
+taskRouter.put('/update', setTime, updateTask);
 taskRouter.get('/findById', findById);
 taskRouter.get('/findByTag', findByTag);
 taskRouter.get('/findByParentId', findByParentId);

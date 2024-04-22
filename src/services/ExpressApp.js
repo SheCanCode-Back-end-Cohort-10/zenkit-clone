@@ -4,7 +4,6 @@ import swaggerUi from 'swagger-ui-express';
 
 import configurations from "../configs/index.js";
 import allRoutes from "../routes/index.js";
-import ErrorHandler from "../middlewares/ErrorHandler.js";
 import documentation from '../docs/documentation.js';
 import ErrorHandlerMiddleware from "../middlewares/ErrorHandlerV2.js";
 
