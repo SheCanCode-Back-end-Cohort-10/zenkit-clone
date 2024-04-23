@@ -12,6 +12,10 @@ export const addCheckListItemValidation = [
     body("name", "Item name is required").not().isEmpty(),
 ];
 
+export const otpValidation = [
+    body("otp", "Otp must be provided").not().isEmpty(),
+];
+
 export const testValidations = [
     body("name", "Task name is required").not().isEmpty(),
     body("email", "Email is required").not().isEmpty(),

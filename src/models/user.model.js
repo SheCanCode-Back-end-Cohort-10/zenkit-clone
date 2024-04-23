@@ -19,6 +19,19 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    otp: {
+        type: Number,
+        required: true
+    },
+    otpExpires: {
+        type: Date,
+        required: false,
+    },
+    verified: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 }, {
     toJSON: {
