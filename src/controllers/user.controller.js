@@ -6,6 +6,7 @@ import { validationResult } from "express-validator";
 import { sendEmail } from "../utils/sendEmail.js";
 import { otpGenerator } from "../utils/otp.js";
 import { UnauthorizedError } from "../errors/UnauthorizedError.js";
+import jwt from "jsonwebtoken";
 
 export const SignUp = asyncWrapper(async(req, res, next) => {
     // Validation
@@ -81,5 +82,30 @@ export const ValidateOpt = asyncWrapper(async(req, res, next) => {
 });
 
 export const SignIn = asyncWrapper(async(req, res, next) => {
-    
-});
+    // Validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new BadRequestError(errors.array()[0].msg));
+    }
+
+    // Find user
+    const foundUser = await UserModel.findOne({ email: req.body.email });
+    if (!foundUser) {
+        return next(new BadRequestError("Invalid email or password!"));
+    };
+
+    // Verify password
+    const isPasswordVerfied = await bcryptjs.compareSync(req.body.password, foundUser.password);
+    if(!isPasswordVerfied) {
+        return next(new BadRequestError("Invalid email or password!"));
+    }
+
+    // Generate token
+    const token = jwt.sign({ id: foundUser.id, email: foundUser.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    res.status(200).json({
+        message: "User logged in!",
+        token: token,
+        user: foundUser
+    });
+;});
