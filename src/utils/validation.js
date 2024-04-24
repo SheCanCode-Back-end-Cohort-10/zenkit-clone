@@ -8,8 +8,17 @@ export const addTagValidation = [
     body("name", "Tag name is required").not().isEmpty(),
 ];
 
+export const forgotPasswordValidation = [
+    body("email", "Email must be provided").not().isEmpty(),
+];
+
 export const addCheckListItemValidation = [
     body("name", "Item name is required").not().isEmpty(),
+];
+
+export const resetPasswordValidation = [
+    body("password", "Password is required").not().isEmpty(),
+    body("password", "Password should contain atleast 8 characters, uppercase and lower case letters, numbers, and symbols").isStrongPassword()
 ];
 
 export const otpValidation = [
